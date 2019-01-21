@@ -6,16 +6,16 @@ from decouple import config
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Get ENV VARIABLES key
-ENV_ROLE = config("ENV_ROLE")
+ENV_ROLE = 'test'
 
 #SECURITY WARNING: don't run with debug turned on in production!
-SECRET_KEY = config('SECRET_KEY_Birthday_website')
-DEBUG = config('DEBUG', default=False, cast=bool)
+SECRET_KEY = 'SECRET_KEY_HERE'
+DEBUG = True
 
 
 from decouple import config, Csv
 
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())
+ALLOWED_HOSTS = []
 
 # Application definition
 
@@ -73,15 +73,21 @@ STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 if ENV_ROLE == 'development':
-    DB_PASS_Birthday_website = config("DB_PASS_Birthday_website")
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
             'NAME': 'Birthday_website',
             'USER': 'postgres',
-            'PASSWORD': DB_PASS_Birthday_website,
+            'PASSWORD': 'postgres',
             'HOST': 'localhost',
             'PORT': '5432',
+        }
+    }
+elif ENV_ROLE == 'test':
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         }
     }
 else:
@@ -135,9 +141,17 @@ STATICFILES_DIRS = (
     )
 
 # # Disquas comments Settings
-DISQUS_API_KEY = config("DISQUS_API_KEY")
+DISQUS_API_KEY = 'DISQUS_API_KEY_HERE'
 DISQUS_WEBSITE_SHORTNAME = 'happy-birthday'
 
 
 # # reCapch key settings
 # GOOGLE_RECAPTCHA_SECRET_KEY='6LdglCgUAAAAAP_E36HbImYCOEhK00yXl7wvaWsD'
+
+
+try:
+    from settings_local import *  # NOQA
+except ImportError as e:
+    print('Local settings cannot be found')
+
+
