@@ -6,16 +6,16 @@ from decouple import config
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Get ENV VARIABLES key
-ENV_ROLE = 'test'
 
 #SECURITY WARNING: don't run with debug turned on in production!
-SECRET_KEY = 'SECRET_KEY_HERE'
-DEBUG = True
+ENV_ROLE = config("ENV_ROLE")
+SECRET_KEY = config('SECRET_KEY')
 
+DEBUG = config('DEBUG', default=False, cast=bool)
 
 from decouple import config, Csv
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())
 
 # Application definition
 
